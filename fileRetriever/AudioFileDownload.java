@@ -8,12 +8,19 @@ import java.sql.SQLException;
 
 import org.apache.commons.io.FileUtils;
 
-public class AudioFileDownload implements AudioFileRetriever {
+import dbConnection.DBConnManager;
 
+public class AudioFileDownload implements AudioFileRetriever {
+	private DBConnManager connManager;
+	
+	public AudioFileDownload(DBConnManager connManager) {
+		this.connManager = connManager;
+	}
+	
 	public File getAudio (String songID) {
 		File fileAudio = null;
 		try {
-			PreparedStatement preparedIDQuery = MyConnection.getConnection().prepareStatement("SELECT filePath AS filePath FROM song WHERE songID = ?");
+			PreparedStatement preparedIDQuery = connManager.getConnection().prepareStatement("SELECT filePath AS filePath FROM song WHERE songID = ?");
 			preparedIDQuery.setInt(1, Integer.parseInt(songID));
 			preparedIDQuery.executeQuery();
 			ResultSet resultSetID = preparedIDQuery.getResultSet();

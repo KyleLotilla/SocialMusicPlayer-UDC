@@ -26,6 +26,7 @@ import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.lang3.StringUtils;
 
+import dbConnection.DBConnManager;
 import fileRetriever.MyConnection;
 
 public class DBSongUploadView extends JFrame {
@@ -40,8 +41,9 @@ public class DBSongUploadView extends JFrame {
 	private int nUploaderID;
 	private File fileAudio;
 	private HashMap mapCmb;
+	private DBConnManager connManager;
 	
-	public DBSongUploadView (SongBuilder songBuild, int nUploaderID) {
+	public DBSongUploadView (SongBuilder songBuild, int nUploaderID, DBConnManager connManager) {
 		super("Upload Song");
 		setBounds(100, 100, 282, 375);
 		setUndecorated(true);
@@ -51,6 +53,7 @@ public class DBSongUploadView extends JFrame {
 		
 		this.songBuild = songBuild;
 		this.nUploaderID = nUploaderID;
+		this.connManager = connManager;
 		
 		JPanel pnlHeader = new JPanel();
 		pnlHeader.setBackground(new Color(103, 128, 159));
@@ -251,7 +254,7 @@ public class DBSongUploadView extends JFrame {
 			super();
 			mapCmb = new HashMap<Integer, Integer>();
 			try {
-				PreparedStatement preparedAlbumQuery = MyConnection.getConnection().prepareStatement("SELECT albumID, title FROM album WHERE uploaderID = ?");
+				PreparedStatement preparedAlbumQuery = connManager.getConnection().prepareStatement("SELECT albumID, title FROM album WHERE uploaderID = ?");
 				preparedAlbumQuery.setInt(1, nUploaderID);
 				ResultSet resultAblums = preparedAlbumQuery.executeQuery();
 				
