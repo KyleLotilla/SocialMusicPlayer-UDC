@@ -9,12 +9,15 @@ import java.sql.SQLException;
 import org.apache.commons.io.FileUtils;
 
 import dbConnection.DBConnManager;
+import serverIPAddress.ServerIPAddressManager;
 
 public class AudioFileDownload implements AudioFileRetriever {
 	private DBConnManager connManager;
+	private ServerIPAddressManager ipManager;
 	
-	public AudioFileDownload(DBConnManager connManager) {
+	public AudioFileDownload(DBConnManager connManager, ServerIPAddressManager ipManager) {
 		this.connManager = connManager;
+		this.ipManager = ipManager; 
 	}
 	
 	public File getAudio (String songID) {
@@ -28,7 +31,7 @@ public class AudioFileDownload implements AudioFileRetriever {
 			String sFilePath = resultSetID.getString("filePath");
 			fileAudio = new File("/Audio/" + sFilePath);
 			
-			URL urlFile = new URL("http://127.0.0.1/Audio/" + sFilePath);
+			URL urlFile = new URL("http://" + ipManager.getServerIPAddress() + "/Audio/" + sFilePath);
 			FileUtils.copyURLToFile(urlFile, fileAudio);
 		} catch (SQLException ex) {
 			ex.printStackTrace();

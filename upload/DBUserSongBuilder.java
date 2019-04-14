@@ -19,12 +19,15 @@ import org.apache.http.util.EntityUtils;
 
 import dbConnection.MySQLConnManager;
 import fileRetriever.MyConnection;
+import serverIPAddress.ServerIPAddressManager;
 
 public class DBUserSongBuilder implements SongBuilder {
 	private MySQLConnManager connManager;
+	private ServerIPAddressManager ipManager;
 	
-	public DBUserSongBuilder(MySQLConnManager connManager) {
+	public DBUserSongBuilder(MySQLConnManager connManager, ServerIPAddressManager ipManager) {
 		this.connManager = connManager;
+		this.ipManager = ipManager;
 	}
 
 	public int buildSong(Map mapSongProperties) {
@@ -65,7 +68,7 @@ public class DBUserSongBuilder implements SongBuilder {
 			
 			HttpClient httpClient = HttpClientBuilder.create().build();
 			HttpEntity httpAudioEntity = MultipartEntityBuilder.create().addPart("fileAudio", new FileBody(fileAudio, ContentType.MULTIPART_FORM_DATA, sFilename)).build();
-			HttpPost postUploadRequest = new HttpPost("http://127.0.0.1:80/audioUpload.php");
+			HttpPost postUploadRequest = new HttpPost("http://" + ipManager.getServerIPAddress() + "/audioUpload.php");
 			postUploadRequest.setEntity(httpAudioEntity);
 			HttpResponse responseUpload = httpClient.execute(postUploadRequest);
 			EntityUtils.consume(httpAudioEntity);
