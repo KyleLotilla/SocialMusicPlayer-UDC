@@ -9,7 +9,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 public class DBSelectionTable extends JTable implements TableSelectionObservable {
-	ArrayList<TableSelectionObserver> tsObservers;
+	private ArrayList<TableSelectionObserver> tsObservers;
 	
 	public DBSelectionTable() {
 		super();

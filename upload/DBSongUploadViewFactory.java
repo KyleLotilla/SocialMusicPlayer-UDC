@@ -4,15 +4,15 @@ import dbConnection.MySQLConnManager;
 
 public class DBSongUploadViewFactory implements UploaderViewFactory {
 
-	private int nUploaderID;
-	private SongBuilder songBuild;
+	private SongBuilderFactory buildFactory;
+	private String sUploaderID;
+	
+	public DBSongUploadViewFactory(SongBuilderFactory buildFactory) {
+		this.buildFactory = buildFactory;
+	}
 	
 	public void createUploadView() {
-		 DBSongUploadView uploadView = new DBSongUploadView(songBuild, nUploaderID, new MySQLConnManager());
+		 DBUserSongUploadView uploadView = new DBUserSongUploadView(buildFactory.createSongBuilder(), sUploaderID, new MySQLConnManager());
 	}
 
-	public void setSongBuilder(SongBuilder songBuild) {
-		this.songBuild = songBuild;
-	}
-	
 }
