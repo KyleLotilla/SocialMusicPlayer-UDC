@@ -199,9 +199,9 @@ public class DBArtistSongUploadView extends JFrame {
 				
 				mapSongProperties.put("fileAudio", fileAudio);
 				
-				int songID = songBuild.buildSong(mapSongProperties);
+				String sSongID = songBuild.buildSong(mapSongProperties);
 				
-				if (songID <= 0)
+				if (sSongID.contentEquals(""))
 					JOptionPane.showMessageDialog(null, "Uploaded Failed");
 				else
 					JOptionPane.showMessageDialog(null, "Uploaded");

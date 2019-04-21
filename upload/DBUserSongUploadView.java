@@ -27,7 +27,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.lang3.StringUtils;
 
 import dbConnection.DBConnManager;
-import fileRetriever.MyConnection;
 
 public class DBUserSongUploadView extends JFrame {
 	private SongBuilder songBuild;
@@ -176,7 +175,6 @@ public class DBUserSongUploadView extends JFrame {
 		pnlBody.add(btnUploadFile);
 		
 		setVisible(true);
-		
 	}
 	
 	private class UploadFileBtnListener implements ActionListener {
@@ -233,9 +231,9 @@ public class DBUserSongUploadView extends JFrame {
 				
 				mapSongProperties.put("fileAudio", fileAudio);
 				
-				int songID = songBuild.buildSong(mapSongProperties);
+				String sSongID = songBuild.buildSong(mapSongProperties);
 				
-				if (songID <= 0)
+				if (sSongID.contentEquals(""))
 					JOptionPane.showMessageDialog(null, "Uploaded Failed");
 				else
 					JOptionPane.showMessageDialog(null, "Uploaded");

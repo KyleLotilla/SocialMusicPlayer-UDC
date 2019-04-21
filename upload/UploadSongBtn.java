@@ -17,6 +17,7 @@ public class UploadSongBtn extends JButton {
 		setBackground(new Color(0, 153, 51));
 		
 		this.uploadFactory = uploadFactory;
+		addActionListener(new UploadBtnListener());
 	}
 	
 	private class UploadBtnListener implements ActionListener {

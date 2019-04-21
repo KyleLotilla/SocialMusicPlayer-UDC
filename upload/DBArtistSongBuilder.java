@@ -22,32 +22,36 @@ import org.apache.http.util.EntityUtils;
 
 import dbConnection.MySQLConnManager;
 import serverIPAddress.ServerIPAddressManager;
+import sqlResult.SQLResultBuilder;
+import sqlResult.SqlIDResultBuilder;
 
 public class DBArtistSongBuilder implements SongBuilder {
 
 	private MySQLConnManager connManager;
 	private ServerIPAddressManager ipManager;
+	private SqlIDResultBuilder usernameResult;
 	
-	public DBArtistSongBuilder (MySQLConnManager connManager, ServerIPAddressManager ipManager) {
+	public DBArtistSongBuilder (MySQLConnManager connManager, ServerIPAddressManager ipManager, SqlIDResultBuilder usernameResult) {
 		this.connManager = connManager;
 		this.ipManager = ipManager;
+		this.usernameResult = usernameResult;
 	}
 
-	public int buildSong(Map mapSongProperties) {
+	public String buildSong(Map mapSongProperties) {
 		String sSongQuery = "INSERT INTO song (uploaderID, title, year, artist, albumID, filePath, genre)"
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
-		String sUsernameQuery = "SELECT username FROM account WHERE accountID = ?";
-		int nSongID = 0;
+		String sSongID = "";
 		try {
 			String sUploaderID = (String) mapSongProperties.get("sUploaderID");
-			int nUploaderID =  Integer.parseInt(sUploaderID);
-			PreparedStatement preparedUsernameQuery = connManager.getConnection().prepareStatement(sSongQuery,Statement.RETURN_GENERATED_KEYS);
-			preparedUsernameQuery.setInt(1, nUploaderID);
-			ResultSet resultUsername = preparedUsernameQuery.executeQuery();
+			ResultSet resultUsername = usernameResult.buildResultSet(sUploaderID);
+			resultUsername.next();
 			String sArtist = resultUsername.getString(1);
 			
 			PreparedStatement preparedSongQuery = connManager.getConnection().prepareStatement(sSongQuery,Statement.RETURN_GENERATED_KEYS);
+			
+			int nUploaderID =  Integer.parseInt(sUploaderID);
 			preparedSongQuery.setInt(1, nUploaderID);
+			
 			preparedSongQuery.setString(2, (String) mapSongProperties.get("sTitle"));
 			
 			int nYear = (int) mapSongProperties.get("nYear");
@@ -87,7 +91,7 @@ public class DBArtistSongBuilder implements SongBuilder {
 			
 			ResultSet resultSetID = preparedSongQuery.getGeneratedKeys();
 			resultSetID.next();
-			nSongID = resultSetID.getInt(1);
+			sSongID = String.valueOf(resultSetID.getInt(1));
 		} catch (SQLException ex) {
 			ex.printStackTrace();
         } catch (ClientProtocolException e) {
@@ -96,7 +100,7 @@ public class DBArtistSongBuilder implements SongBuilder {
 			e.printStackTrace();
 		}
 		
-		return nSongID;
+		return sSongID;
 	}
 
 }

@@ -18,7 +18,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 import dbConnection.MySQLConnManager;
-import fileRetriever.MyConnection;
 import serverIPAddress.ServerIPAddressManager;
 
 public class DBUserSongBuilder implements SongBuilder {
@@ -30,10 +29,10 @@ public class DBUserSongBuilder implements SongBuilder {
 		this.ipManager = ipManager;
 	}
 
-	public int buildSong(Map mapSongProperties) {
+	public String buildSong(Map mapSongProperties) {
 		String sSongQuery = "INSERT INTO song (uploaderID, title, year, artist, albumID, filePath, genre)"
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
-		int nSongID = 0;
+		String sSongID = "";
 		try {
 			PreparedStatement preparedSongQuery = connManager.getConnection().prepareStatement(sSongQuery,Statement.RETURN_GENERATED_KEYS);
 			String sUploaderID = (String) mapSongProperties.get("sUploaderID");
@@ -79,7 +78,7 @@ public class DBUserSongBuilder implements SongBuilder {
 			
 			ResultSet resultSetID = preparedSongQuery.getGeneratedKeys();
 			resultSetID.next();
-			nSongID = resultSetID.getInt(1);
+			sSongID = String.valueOf(resultSetID.getInt(1));
 		} catch (SQLException ex) {
 			ex.printStackTrace();
         } catch (ClientProtocolException e) {
@@ -88,7 +87,7 @@ public class DBUserSongBuilder implements SongBuilder {
 			e.printStackTrace();
 		}
 		
-		return nSongID;
+		return sSongID;
 	}
 	
 }
