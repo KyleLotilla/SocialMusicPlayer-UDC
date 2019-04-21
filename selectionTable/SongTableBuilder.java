@@ -9,25 +9,25 @@ import songInfo.SongInfo;
 import songInfo.SongInfoCollection;
 import songInfo.SongInfoIterator;
 
-public class SongTableBuilder implements DBSelectionTableBuilder {
+public class SongTableBuilder implements SongInfoSelectionTableBuilder {
 
-	public DBSelectionTable buildTable(SongInfoCollection songInfoCollection) {
-		DBSelectionTable dbstSongTable =  new DBSelectionTable();
+	public SongInfoSelectionTable buildTable(SongInfoCollection songInfoCollection) {
+		SongInfoSelectionTable dbstSongTable =  new SongInfoSelectionTable();
 		DefaultTableModel dtmTableModel = (DefaultTableModel) dbstSongTable.getModel();
 		SongInfoIterator songInfoIterator = songInfoCollection.createIterator();
 		Object songInfoRow[] = new String[5];
 		
 		while (songInfoIterator.hasnext()) {
-			songInfoIterator.next();
 			SongInfo songInfoIndex = songInfoIterator.getCurSongInfo();
 			
-			songInfoRow[0] = songInfoIndex.getTitle();
-			songInfoRow[1] = songInfoIndex.getAlbumTitle();
-			songInfoRow[2] = songInfoIndex.getGenre();
-			songInfoRow[3] = songInfoIndex.getYear();
-			songInfoRow[4] = songInfoIndex.getArtist();
+			songInfoRow[0] = songInfoIndex.getInfo("sTitle");
+			songInfoRow[1] = songInfoIndex.getInfo("sAlbumTitle");
+			songInfoRow[2] = songInfoIndex.getInfo("sGenre");
+			songInfoRow[3] = String.valueOf(songInfoIndex.getInfo("nYear"));
+			songInfoRow[4] = songInfoIndex.getInfo("sArtist");
 			dtmTableModel.addRow(songInfoRow);
 			
+			songInfoIterator.next();
 		}
 		
 		return dbstSongTable;

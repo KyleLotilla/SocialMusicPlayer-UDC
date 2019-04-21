@@ -8,7 +8,7 @@ public class SongInfoArrayListIterator implements SongInfoIterator {
 	
 	public SongInfoArrayListIterator(ArrayList<SongInfo> songInfoList) {
 		this.songInfoList = songInfoList; 
-		nIndex = -1;
+		nIndex = 0;
 	}
 
 	public void next() {

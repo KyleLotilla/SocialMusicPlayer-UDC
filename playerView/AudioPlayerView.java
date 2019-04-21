@@ -25,7 +25,7 @@ public class AudioPlayerView extends JPanel {
 		
 		btnPlayback = new PlaybackBtn();
 		add(btnPlayback);
-		btnPlayback.setBounds(100, 100, 300, 300);
+		btnPlayback.setBounds(50, 100, 300, 300);
 		
 		btnSeekForward = new SeekForwardBtn();
 		add(btnSeekForward);

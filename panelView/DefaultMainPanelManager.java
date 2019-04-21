@@ -1,6 +1,7 @@
 package panelView;
 
 import java.awt.CardLayout;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -9,16 +10,18 @@ public class DefaultMainPanelManager implements JMainPanelViewManager {
 	private Map<String, JMainPanelView> mapNameMapping;
 	private JPanel panelMain;
 	private CardLayout cardMain;
+	private JMainPanelView panelCurrent;
 	
-	public DefaultMainPanelManager(Map<String, JMainPanelView> mapNameMapping) {
-		this.mapNameMapping = mapNameMapping;
+	public DefaultMainPanelManager() {
+		mapNameMapping = new HashMap<String, JMainPanelView>();
 		cardMain = new CardLayout();
 		panelMain = new JPanel(cardMain);
+		panelCurrent = null;
 	}
 	
 	public void showMainView(String sPanel) {
-		JMainPanelView panelSelected = mapNameMapping.get(sPanel);
-		panelSelected.refreshView();
+		panelCurrent = mapNameMapping.get(sPanel);
+		panelCurrent.refreshView();
 		cardMain.show(panelMain, sPanel);
 	}
 
@@ -26,5 +29,12 @@ public class DefaultMainPanelManager implements JMainPanelViewManager {
 		panelMain.add(sPanel, mainPanel);
 		mapNameMapping.put(sPanel, mainPanel);
 	}
+
+	public void refreshCurPanel() {
+		panelCurrent.refreshView();
+	}
 	
+	public JPanel getPanel() {
+		return panelMain;
+	}
 }
